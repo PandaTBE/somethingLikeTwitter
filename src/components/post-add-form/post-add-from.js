@@ -32,6 +32,7 @@ export default class PostAddForm extends Component {
                 className="bottom-panel d-flex"
                 onSubmit={this.onSubmit}>
                 <input
+                    required="true"
                     type="text"
                     placeholder="О чем вы думаете сейчас?"
                     className="form-control new-post-label"
