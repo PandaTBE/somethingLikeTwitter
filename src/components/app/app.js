@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import nextId from "react-id-generator";
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import PostStatusFilter from '../post-status-filter';
@@ -18,9 +19,9 @@ export default class App extends Component {
         super(props);
         this.state = {
             data: [
-                { label: 'Going to learn React', important: true, id: 1 },
-                { label: 'That is so good', important: false, id: 2 },
-                { label: 'I need a break...', important: false, id: 3 }
+                { label: 'Going to learn React', important: true, id: nextId() },
+                { label: 'That is so good', important: false, id: nextId() },
+                { label: 'I need a break...', important: false, id: nextId() }
             ]
         };
         this.deleteItem = this.deleteItem.bind(this);
@@ -33,7 +34,6 @@ export default class App extends Component {
     deleteItem(id) {
         this.setState(({ data }) => {
             const index = data.findIndex(elem => elem.id === id);
-
             const newArr = [...data.slice(0, index), ...data.slice(index + 1)];
 
             return {
