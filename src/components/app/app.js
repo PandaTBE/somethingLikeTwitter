@@ -19,17 +19,19 @@ export default class App extends Component {
         super(props);
         this.state = {
             data: [
-                { label: 'Going to learn React', important: true, id: nextId() },
-                { label: 'That is so good', important: false, id: nextId() },
-                { label: 'I need a break...', important: false, id: nextId() }
+                { label: 'Going to learn React', important: true, like: false, id: nextId() },
+                { label: 'That is so good', important: false, like: false, id: nextId() },
+                { label: 'I need a break...', important: false, like: false, id: nextId() }
             ]
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
-
-        this.maxId = 4;
+        this.onToggleImportant = this.onToggleImportant.bind(this);
+        this.onToggleLike = this.onToggleLike.bind(this);
 
     }
+
+
 
     deleteItem(id) {
         this.setState(({ data }) => {
@@ -46,7 +48,7 @@ export default class App extends Component {
         const newItem = {
             label: body,
             important: false,
-            id: this.maxId++
+            id: nextId()
         }
         this.setState(({ data }) => {
             const newArr = [...data, newItem];
@@ -56,17 +58,56 @@ export default class App extends Component {
         });
     }
 
+    onToggleImportant(id) {
+        this.setState(({ data }) => {
+            const index = data.findIndex(elem => elem.id === id);
+
+            const old = data[index];
+            const newItem = { ...old, important: !old.important };
+
+            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+
+            return {
+                data: newArr
+            }
+        })
+
+    }
+
+    onToggleLike(id) {
+        this.setState(({ data }) => {
+            const index = data.findIndex(elem => elem.id === id);
+
+            const old = data[index];
+            const newItem = { ...old, like: !old.like };
+
+            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+
+            return {
+                data: newArr
+            }
+        })
+    }
+
     render() {
+        const { data } = this.state;
+        const liked = data.filter(item => item.like).length;
+        const allPosts = data.length;
+
         return (
             <AppBlock>
-                <AppHeader />
+                <AppHeader
+                    liked={liked}
+                    allPosts={allPosts} />
                 <div className="search-panel d-flex">
                     <SearchPanel />
                     <PostStatusFilter />
                 </div>
                 <PostList
                     posts={this.state.data}
-                    onDelete={this.deleteItem} />
+                    onDelete={this.deleteItem}
+                    onToggleImportant={this.onToggleImportant}
+                    onToggleLike={this.onToggleLike} />
                 <PostAddForm
                     onAdd={this.addItem} />
             </AppBlock>
